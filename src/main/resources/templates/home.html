@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+
+  	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<title>Theself Company Home Page</title>
+</head>
+
+<body>
+	<div class="container">
+		<h2>Theself Company Home Page</h2>
+		<hr>
+		
+		<p>
+			User: <span sec:authentication="name"></span>
+			<br><br>
+			Role(s): <span sec:authentication="principal.authorities"></span>
+		</p>
+		
+		<div sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">
+			<p>
+				<a th:href="@{/leaders}">Leadership
+					Meeting</a> (Only for Managers)
+			</p>
+		</div>
+		
+		<div sec:authorize="hasRole('ADMIN')">
+			<p>
+				<a th:href="@{/admin}">Maintenance</a> (Only for Admin)
+			</p>
+		</div>
+		
+		<hr>
+		
+		Welcome to Theself Company Home Page
+		<br><br>
+		
+		<table>
+			<tr>
+				<td>
+					<form action="#" th:action="@{/logout}" method="POST">
+						<input type="submit" value="Logout" class="btn btn-primary btn-sm" />
+					</form>
+				</td>
+				<td></td>
+				<td>
+					<form action="#" th:action="@{/customer/list}" method="GET">
+						<input type="submit" value="Customer List" class="btn btn-primary btn-sm" />
+					</form>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	
+</body>
+</html>

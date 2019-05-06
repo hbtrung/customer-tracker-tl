@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+  	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<title>List Customers</title>
+	<!-- <link rel="stylesheet" type="text/css" href="@{/css/style.css}" /> -->
+</head>
+
+<body>
+	
+	<div class="container">
+		<h3>CRM - Customer Relationship Manager</h3>
+		<hr>
+		
+		<p>
+			User: <span sec:authentication="name"></span>, Role(s): <span sec:authentication="principal.authorities"></span>
+		</p>
+		
+		<a sec:authorize="hasAnyRole('MANAGER', 'ADMIN')" th:href="@{/customer/showFormForAdd}" 
+			class="btn btn-primary btn-sm mb-3">Add Customer</a>
+			
+		<div>
+			<form action="#" th:action="@{/customer/search}" method="GET">
+				<table>
+					<tr>
+						<td>Search customer: <input type="text" name="searchName" /></td>
+						<td><input type="submit" value="Search" class="btn btn-primary btn-sm" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<br>
+		
+		<table class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Email</th>
+					
+					<th sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">Action</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="customer : ${customers}">
+					
+					<td th:text="${customer.firstName}"></td>
+					<td th:text="${customer.lastName}"></td>
+					<td th:text="${customer.email}"></td>
+					<td sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">
+						<a th:href="@{/customer/showFormForUpdate(customerId=${customer.id})}"
+							class="btn btn-info btn-sm">Update</a>
+					
+						<a sec:authorize="hasRole('ADMIN')" th:href="@{/customer/delete(customerId=${customer.id})}" 
+							class="btn btn-danger btn-sm" 
+							onclick="if (!(confirm('Are you sure you want to delete this customer?'))) return false">Delete</a>
+					</td>						
+				</tr>
+			</tbody>
+		</table>
+		
+		<p>Note: Customers are sorted by last name</p>
+		
+		<!-- 
+		<ul>
+			<li th:each="customer : ${customers}" th:text="|${customer.id} ${customer.firstName} ${customer.lastName} ${customer.email}|"></li>
+		</ul>
+		 -->
+		
+		<table>
+			<tr>
+				<td>
+					<form action="#" th:action="@{/logout}" method="POST">
+						<input type="submit" value="Logout" class="btn btn-primary btn-sm" />
+					</form>
+				</td>
+				<td></td>
+				<td>
+					<form action="#" th:action="@{/home}" method="GET">
+						<input type="submit" value="Home Page" class="btn btn-primary btn-sm" />
+					</form>
+				</td>
+			</tr>
+		
+		</table>
+		
+	</div>
+	
+	 
+	<div style="width:180px;">
+		<div style="float: left; width: 60px">
+			
+		</div>
+		
+		<div sec:authorize="hasRole('ADMIN')" style="float: right; width: 100px">
+			
+		</div>
+
+	</div>
+	
+</body>
+
+</html>
